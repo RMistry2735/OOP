@@ -1,0 +1,156 @@
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.swing.JFrame;
+
+import uk.ac.leedsbeckett.oop.LBUGraphics;
+
+import java.awt.Color;
+
+//import uk.ac.leedsbeckett.oop.cmdLineInterface;
+
+public class GraphicsSystem extends LBUGraphics
+{
+	
+    public List<String> command_History = new ArrayList<String>();
+
+    public String Standard_Commands[] = 
+    	{
+    			"about", "clear", "reset", "penup","pendown",
+    			"black","green","red","white", "clearhistory"
+    	};
+    
+    public String Variable_Commands[] = 
+    	{
+    			"turnleft", "turnright", "forward", "backward"
+    	};
+    public String File_Commands[] = 
+    	{
+    			"save","load"
+    	};
+	public GraphicsSystem()
+	{
+			JFrame MainFrame = new JFrame();                //create a frame to display the turtle panel on
+			MainFrame.setLayout(new FlowLayout());  //not strictly necessary
+			MainFrame.add(this);                                    //"this" is this object that extends turtle graphics so we are adding a turtle graphics panel to the frame
+			MainFrame.pack();                                               //set the frame to a size we can see
+			MainFrame.setVisible(true);                             //now display it
+			                                                               //call the LBUGraphics about method to display version information.
+	}
+
+	
+
+
+
+	
+
+	
+	@Override
+	public void processCommand(String command) 
+    {
+		System.out.println(command);
+		String[] commands = command.split(" ");
+		//int int_parameter = Integer.parseInt(commands[1]);
+
+		if (isStandardCommandValid(commands[0]) == false) {
+			displayMessage("Invalid Command");
+			return;
+		}
+		if (isVariableCommandValid(commands[0]) == false) {
+			displayMessage("Invalid Command");
+			return;
+		}
+		
+		switch (commands[0]) {
+		case "about":
+			about();
+			break;
+		case "clear":
+			clear();
+			displayMessage("Cleared canvas");
+			break;
+		case "reset":
+			reset();
+			penDown();
+			displayMessage("Reset canvas");
+			break;
+		case "penup":
+			penUp();
+			displayMessage("Pen set to up");
+			break;
+		case "pendown":
+			penDown();
+			displayMessage("Pen set to down");
+			break;
+		case "turnleft":
+			int left=Integer.parseInt(commands[1]);
+			turnLeft(left);
+			displayMessage("Turned left by inputted degrees");
+			break;
+		case "turnright":
+			int right=Integer.parseInt(commands[1]);
+			turnRight(right);
+			displayMessage("Turned right by inputted degrees");
+			break;
+		case "forward":
+			int distance=Integer.parseInt(commands[1]);
+			forward(distance);
+			displayMessage("Moved forwards by inputted distance");
+			break;
+		case "backward":
+			int distance1=Integer.parseInt(commands[1]);
+			forward(-distance1);
+			displayMessage("Moved backwards by inputted distance");
+			break;
+		case "black":
+			setPenColour(Color.BLACK);
+			displayMessage("Pen colour set to black");
+			break;
+		case "green":
+			setPenColour(Color.GREEN);
+			displayMessage("Pen colour set to green");
+			break;
+		case "red":
+			setPenColour(Color.RED);
+			displayMessage("Pen colour set to red");
+			break;
+		case "white":
+			setPenColour(Color.WHITE);
+			displayMessage("Pen colour set to white");
+			break;
+		case "save":
+			displayMessage("Saving canvas");
+			break;
+		case "load":
+			displayMessage("Loading canvas");
+			break;
+	}
+
+		
+
+	
+    }
+
+
+
+
+	private boolean isStandardCommandValid(String command) 
+	{	
+		boolean valid = Arrays.stream(Standard_Commands).anyMatch(command::equals);
+		
+		return valid;
+	}	
+	
+	private boolean isVariableCommandValid(String command)
+	{
+		boolean valid = Arrays.stream(Variable_Commands).anyMatch(command::equals);
+		
+		return valid;
+	}
+
+	
+
+
+}
